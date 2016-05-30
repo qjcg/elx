@@ -35,9 +35,9 @@ mysite
 ## Usage
 
 ```shell
-$ elst init
+$ elx init
 
-$ elst build
+$ elx build
 
-$ elst watch
+$ elx watch
 ```
