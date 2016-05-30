@@ -18,7 +18,7 @@ import (
 
 var (
 	// directory layout to be generated via "init" subcommand
-	DirLayout = string{
+	DirLayout = []string{
 		"aaa",
 		"bbb",
 		"ccc",
