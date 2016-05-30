@@ -10,8 +10,26 @@ import (
 	"path/filepath"
 
 	"github.com/microcosm-cc/bluemonday"
+	// For an example of front matter handling, see:
+	//   https://github.com/spf13/hugo/blob/master/parser/frontmatter.go
+	_ "github.com/naoina/toml"
 	"github.com/russross/blackfriday"
 )
+
+var (
+	// directory layout to be generated via "init" subcommand
+	DirLayout = string{
+		"aaa",
+		"bbb",
+		"ccc",
+	}
+)
+
+type Post struct {
+	Title         string
+	TimePublished string
+	TimeUpdated   string
+}
 
 func main() {
 	src := flag.String("d", "src", "source directory")
@@ -20,7 +38,7 @@ func main() {
 	// find markdown files
 	matches, err := filepath.Glob(*src + "/*.md")
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 
 	// convert markdown to HTML
