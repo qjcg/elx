@@ -43,6 +43,9 @@ var (
 			"config.toml",
 		},
 	}
+
+	src string = "_posts"
+	dst string = "_site"
 )
 
 type Post struct {
@@ -54,9 +57,9 @@ type Post struct {
 func main() {
 	flag.Usage = func() {
 		fmt.Println(usage)
+		flag.PrintDefaults()
 	}
 	basePath := flag.String("b", ".", "base path")
-	src := flag.String("d", "src", "source directory")
 	flag.Parse()
 
 	args := flag.Args()
@@ -66,34 +69,29 @@ func main() {
 		os.Exit(1)
 	}
 
+	if len(args) == 2 {
+		basePath = &args[1]
+	}
+
 	switch args[0] {
+	// init [DIR]
 	case "init":
-		if len(args) == 2 {
-			basePath = &args[1]
-		}
-		err := initDirLayout(*basePath, DefLayout)
+		err := InitDirLayout(*basePath, DefLayout)
 		if err != nil {
 			log.Println(err)
 		}
-	}
-
-	// find markdown files
-	matches, err := filepath.Glob(*src + "/*.md")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// convert markdown to HTML
-	for _, m := range matches {
-		dat, err := ioutil.ReadFile(m)
+	// build [DIR]
+	case "build":
+		src = filepath.Join(*basePath, src)
+		dst = filepath.Join(*basePath, dst)
+		err := Build(src, dst)
 		if err != nil {
 			log.Println(err)
 		}
-		fmt.Fprintf(os.Stdout, "%s\n", toHTML(dat))
 	}
 }
 
-func initDirLayout(basepath string, layout *Layout) error {
+func InitDirLayout(basepath string, layout *Layout) error {
 	defer fmt.Println("Initialized elx directory:", basepath)
 	for _, d := range layout.Dirs {
 		path := filepath.Join(basepath, d)
@@ -106,6 +104,23 @@ func initDirLayout(basepath string, layout *Layout) error {
 		if err != nil {
 			log.Println(err)
 		}
+	}
+	return nil
+}
+
+func Build(srcdir, dstdir string) error {
+	matches, err := filepath.Glob(srcdir + "/*.md")
+	if err != nil {
+		return err
+	}
+
+	// convert markdown to HTML
+	for _, md := range matches {
+		dat, err := ioutil.ReadFile(md)
+		if err != nil {
+			log.Println(err)
+		}
+		fmt.Fprintf(os.Stdout, "%s\n", toHTML(dat))
 	}
 	return nil
 }
