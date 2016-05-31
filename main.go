@@ -84,7 +84,7 @@ func main() {
 		os.Exit(1)
 	// init [DIR]
 	case "init":
-		err := InitDirLayout(*basePath, DefLayout)
+		err := Init(*basePath, DefLayout)
 		if err != nil {
 			log.Println(err)
 		}
@@ -99,7 +99,8 @@ func main() {
 	}
 }
 
-func InitDirLayout(basepath string, layout *Layout) error {
+// Init creates a new directory with the standard layout.
+func Init(basepath string, layout *Layout) error {
 	defer fmt.Println("Initialized elx directory:", basepath)
 	for _, d := range layout.Dirs {
 		path := filepath.Join(basepath, d)
