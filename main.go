@@ -22,11 +22,16 @@ type Layout struct {
 }
 
 const (
-	usage = `elx: A simple static site generator.
+	usage = `
+elx: A simple static site generator.
 John Gosset 2016 (MIT License)
 
 elx init [<DIR>]
 elx build [<DIR>]
+`
+
+	defConfig = `title = "An Elx Static Site"
+publisher = "Jerry Q. Hacker"
 `
 )
 
@@ -58,6 +63,7 @@ func main() {
 	flag.Usage = func() {
 		fmt.Println(usage)
 		flag.PrintDefaults()
+		fmt.Println()
 	}
 	basePath := flag.String("b", ".", "base path")
 	flag.Parse()
@@ -99,7 +105,7 @@ func InitDirLayout(basepath string, layout *Layout) error {
 
 	for _, f := range layout.Files {
 		path := filepath.Join(basepath, f)
-		err := ioutil.WriteFile(path, []byte{}, 0644)
+		err := ioutil.WriteFile(path, []byte(defConfig), 0644)
 		if err != nil {
 			log.Println(err)
 		}
