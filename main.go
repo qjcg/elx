@@ -117,6 +117,7 @@ func Init(basepath string, layout *Layout) error {
 	return nil
 }
 
+// Build renders the markdown provided in srcdir as HTML.
 func Build(srcdir, dstdir string) error {
 	matches, err := filepath.Glob(srcdir + "/*.md")
 	if err != nil {
