@@ -64,12 +64,11 @@ func main() {
 
 	args := flag.Args()
 
-	if len(args) == 0 {
+	switch flag.NArg() {
+	case 0:
 		flag.Usage()
 		os.Exit(1)
-	}
-
-	if len(args) == 2 {
+	case 2:
 		basePath = &args[1]
 	}
 
