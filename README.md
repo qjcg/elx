@@ -7,6 +7,14 @@
 - Uses Go Templates
 - Default template handles photo galleries and text articles
 - Configure site with TOML
+- Optional minification of web content
+
+## Anti-Features
+
+- Lots of subcommands
+- Lots of options
+- Lots of cornercases
+- Lots of markup formats
 
 
 ## Directory structure
