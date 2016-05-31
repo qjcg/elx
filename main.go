@@ -26,8 +26,8 @@ const (
 elx: A simple static site generator.
 John Gosset 2016 (MIT License)
 
-elx init [<DIR>]
-elx build [<DIR>]
+  elx init [DIR]
+  elx build [DIR]
 `
 
 	defConfig = `title = "An Elx Static Site"
@@ -79,6 +79,9 @@ func main() {
 	}
 
 	switch args[0] {
+	case "help":
+		flag.Usage()
+		os.Exit(1)
 	// init [DIR]
 	case "init":
 		err := InitDirLayout(*basePath, DefLayout)
