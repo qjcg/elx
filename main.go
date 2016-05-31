@@ -28,6 +28,7 @@ John Gosset 2016 (MIT License)
 
   elx init [DIR]
   elx build [DIR]
+  elx serve [DIR]
 `
 
 	defConfig = `title = "An Elx Static Site"
