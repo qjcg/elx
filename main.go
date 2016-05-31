@@ -79,9 +79,6 @@ func main() {
 	}
 
 	switch args[0] {
-	case "help":
-		flag.Usage()
-		os.Exit(1)
 	// init [DIR]
 	case "init":
 		err := Init(*basePath, DefLayout)
@@ -96,6 +93,9 @@ func main() {
 		if err != nil {
 			log.Println(err)
 		}
+	default:
+		flag.Usage()
+		os.Exit(1)
 	}
 }
 
