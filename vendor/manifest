@@ -5,7 +5,7 @@
 			"importpath": "github.com/microcosm-cc/bluemonday",
 			"repository": "https://github.com/microcosm-cc/bluemonday",
 			"vcs": "git",
-			"revision": "f77f16ffc87a6a58814e64ae72d55f9c41374e6d",
+			"revision": "e79763773ab6222ca1d5a7cbd9d62d83c1f77081",
 			"branch": "master"
 		},
 		{
@@ -40,7 +40,7 @@
 			"importpath": "golang.org/x/net/html",
 			"repository": "https://go.googlesource.com/net",
 			"vcs": "git",
-			"revision": "4971afdc2f162e82d185353533d3cf16188a9f4e",
+			"revision": "6cdc0daab091c43fc46193327e0047b4f883c613",
 			"branch": "master",
 			"path": "/html"
 		}
