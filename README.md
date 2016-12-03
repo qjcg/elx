@@ -43,9 +43,12 @@ mysite
 ## Usage
 
 ```shell
+# Create a new site in ./potatoes.com.
+$ elx init potatoes.com
+
+# Create a new site in the current directory.
 $ elx init
 
+# Build
 $ elx build
-
-$ elx watch
 ```
