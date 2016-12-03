@@ -1,4 +1,4 @@
-// Electrostatic: a simple static site generator.
+// A simple static site generator.
 package main
 
 import (
@@ -8,14 +8,17 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
-	"github.com/microcosm-cc/bluemonday"
 	// For an example of front matter handling, see:
 	//   https://github.com/spf13/hugo/blob/master/parser/frontmatter.go
+	"github.com/hashicorp/logutils"
+	"github.com/microcosm-cc/bluemonday"
 	_ "github.com/naoina/toml"
 	"github.com/russross/blackfriday"
 )
 
+// Layout is a collection of dirs and files representing an elx site.
 type Layout struct {
 	Dirs  []string
 	Files []string
@@ -28,7 +31,7 @@ John Gosset 2016 (MIT License)
 
   elx init [DIR]
   elx build [DIR]
-  elx serve [DIR]
+  elx version
 `
 
 	defConfig = `title = "An Elx Static Site"
@@ -37,7 +40,8 @@ publisher = "Jerry Q. Hacker"
 )
 
 var (
-	// directory layout to be generated via "init" subcommand
+	// DefLayout is the default directory layout to be generated via "init"
+	// subcommand.
 	DefLayout = &Layout{
 		Dirs: []string{
 			"_site",
@@ -50,10 +54,11 @@ var (
 		},
 	}
 
-	src string = "_posts"
-	dst string = "_site"
+	src = "_posts"
+	dst = "_site"
 )
 
+// Post contains metadata for a blog post.
 type Post struct {
 	Title         string
 	TimePublished string
@@ -67,26 +72,44 @@ func main() {
 		fmt.Println()
 	}
 	basePath := flag.String("b", ".", "base path")
+	debug := flag.Bool("d", false, "print debug messages")
 	flag.Parse()
 
-	args := flag.Args()
+	// Configure levelled logging.
+	filter := &logutils.LevelFilter{
+		Levels:   []logutils.LogLevel{"DEBUG", "INFO"},
+		MinLevel: logutils.LogLevel("INFO"),
+		Writer:   os.Stdout,
+	}
 
+	if *debug {
+		filter.MinLevel = logutils.LogLevel("DEBUG")
+	}
+
+	log.SetOutput(filter)
+
+	args := flag.Args()
 	switch flag.NArg() {
 	case 0:
 		flag.Usage()
 		os.Exit(1)
+
+	// Set basePath if provided as argument.
 	case 2:
 		basePath = &args[1]
 	}
 
+	// Run subcommand.
 	switch args[0] {
-	// init [DIR]
+
+	// Init [DIR]
 	case "init":
 		err := Init(*basePath, DefLayout)
 		if err != nil {
 			log.Println(err)
 		}
-	// build [DIR]
+
+	// Build [DIR]
 	case "build":
 		src = filepath.Join(*basePath, src)
 		dst = filepath.Join(*basePath, dst)
@@ -94,44 +117,65 @@ func main() {
 		if err != nil {
 			log.Println(err)
 		}
+	case "version":
+		fmt.Println(Version)
 	default:
 		flag.Usage()
 		os.Exit(1)
 	}
 }
 
-// Init creates a new directory with the standard layout.
+// Init creates a new directory with the specified layout.
 func Init(basepath string, layout *Layout) error {
-	defer fmt.Println("Initialized elx directory:", basepath)
+
+	// Create Layout's directories.
 	for _, d := range layout.Dirs {
 		path := filepath.Join(basepath, d)
-		os.MkdirAll(path, 0775)
+		err := os.MkdirAll(path, 0775)
+		if err != nil {
+			return err
+		}
+		log.Printf("[DEBUG] Created directory: %s\n", d)
 	}
 
+	// Create Layout's files.
 	for _, f := range layout.Files {
 		path := filepath.Join(basepath, f)
 		err := ioutil.WriteFile(path, []byte(defConfig), 0644)
 		if err != nil {
 			log.Println(err)
 		}
+		log.Printf("[DEBUG] Created file: %s\n", f)
 	}
+
 	return nil
 }
 
 // Build renders the markdown provided in srcdir as HTML.
 func Build(srcdir, dstdir string) error {
+
+	// Get a slice of markdown files.
 	matches, err := filepath.Glob(srcdir + "/*.md")
 	if err != nil {
 		return err
 	}
 
-	// convert markdown to HTML
+	// Convert markdown to HTML.
 	for _, md := range matches {
+		dstFile := strings.Replace(filepath.Base(md), ".md", ".html", 1)
+		log.Printf("[DEBUG] markdown file src: %s\n", md)
+		log.Printf("[DEBUG] markdown file dst: %s/%s\n", dstdir, dstFile)
+
 		dat, err := ioutil.ReadFile(md)
 		if err != nil {
-			log.Println(err)
+			log.Printf("[INFO] Error reading .md file: %s\n", err)
 		}
-		fmt.Fprintf(os.Stdout, "%s\n", toHTML(dat))
+
+		// TODO: Write full HTML webpage here, don't just
+		err = ioutil.WriteFile(filepath.Join(dstdir, dstFile), toHTML(dat), 0644)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
