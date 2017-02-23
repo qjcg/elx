@@ -1,5 +1,8 @@
 # Electrostatic: a simple static site generator
 
+**NOTE: This is pre-alpha software. Several
+features are not yet fully implemented.**
+
 
 ## Features
 
@@ -18,8 +21,6 @@
 
 
 ## Directory structure
-
-(WIP, try and create something simple, inspired by below refs)
 
 ```
 mysite
@@ -52,3 +53,7 @@ $ elx init
 # Build
 $ elx build
 ```
+
+## Licence
+
+MIT.
