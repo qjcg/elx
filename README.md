@@ -1,4 +1,6 @@
-# Electrostatic: a simple static site generator
+# Electrostatic
+
+A simple static site generator.
 
 **NOTE: This is pre-alpha software. Several
 features are not yet fully implemented.**
@@ -7,9 +9,11 @@ features are not yet fully implemented.**
 ## Features
 
 - Converts directory with markdown content to static HTML
-- Uses Go Templates
-- Default template handles photo galleries and text articles
-- Configure site with TOML
+- Templates for:
+    - blogs
+    - photo galleries
+    - presentation slides
+- TOML-based configuration
 - Optional minification of web content
 
 ## Anti-Features
