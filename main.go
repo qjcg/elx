@@ -45,8 +45,7 @@ var (
 	DefLayout = &Layout{
 		Dirs: []string{
 			"_site",
-			"_includes",
-			"_layouts",
+			"_templates",
 			"_posts",
 		},
 		Files: []string{
