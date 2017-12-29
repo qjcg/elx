@@ -180,6 +180,6 @@ func Build(srcdir, dstdir string) error {
 }
 
 func toHTML(input []byte) []byte {
-	unsafe := blackfriday.MarkdownCommon(input)
+	unsafe := blackfriday.Run(input)
 	return bluemonday.UGCPolicy().SanitizeBytes(unsafe)
 }
