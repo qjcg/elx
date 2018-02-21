@@ -134,7 +134,7 @@ func Init(basepath string, layout *Layout) error {
 		if err != nil {
 			return err
 		}
-		log.Printf("[DEBUG] Created directory: %s\n", d)
+		log.Printf("[DEBUG] Created directory: %s\n", path)
 	}
 
 	// Create Layout's files.
@@ -144,7 +144,7 @@ func Init(basepath string, layout *Layout) error {
 		if err != nil {
 			log.Println(err)
 		}
-		log.Printf("[DEBUG] Created file: %s\n", f)
+		log.Printf("[DEBUG] Created file: %s\n", path)
 	}
 
 	return nil
