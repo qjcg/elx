@@ -130,7 +130,7 @@ func Init(basepath string, layout *Layout) error {
 	// Create Layout's directories.
 	for _, d := range layout.Dirs {
 		path := filepath.Join(basepath, d)
-		err := os.MkdirAll(path, 0775)
+		err := os.MkdirAll(path, 0700)
 		if err != nil {
 			return err
 		}
@@ -140,9 +140,9 @@ func Init(basepath string, layout *Layout) error {
 	// Create Layout's files.
 	for _, f := range layout.Files {
 		path := filepath.Join(basepath, f)
-		err := ioutil.WriteFile(path, []byte(defConfig), 0644)
+		err := ioutil.WriteFile(path, []byte(defConfig), 0600)
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 		log.Printf("[DEBUG] Created file: %s\n", path)
 	}
@@ -170,7 +170,7 @@ func Build(srcdir, dstdir string) error {
 			log.Printf("[INFO] Error reading .md file: %s\n", err)
 		}
 
-		// TODO: Write full HTML webpage here, don't just
+		// TODO: Write full HTML webpage from **template** here.
 		err = ioutil.WriteFile(filepath.Join(dstdir, dstFile), toHTML(dat), 0644)
 		if err != nil {
 			return err
