@@ -1,5 +1,5 @@
 // A simple static site generator.
-package main
+package main // import "github.com/qjcg/elx"
 
 import (
 	"flag"
@@ -15,7 +15,7 @@ import (
 	"github.com/hashicorp/logutils"
 	"github.com/microcosm-cc/bluemonday"
 	_ "github.com/naoina/toml"
-	"github.com/russross/blackfriday"
+	"gopkg.in/russross/blackfriday.v2"
 )
 
 // Layout is a collection of dirs and files representing an elx site.
