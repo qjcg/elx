@@ -29,9 +29,12 @@ const (
 elx: A simple static site generator.
 John Gosset 2016 (MIT License)
 
-  elx init [DIR]
-  elx build [DIR]
-  elx version
+  elx [OPTS] SUBCOMMAND
+
+  SUBCOMMANDS:
+	  init [DIR]
+	  build [DIR]
+	  version
 `
 
 	defConfig = `title = "An Elx Static Site"
@@ -70,7 +73,6 @@ func main() {
 		flag.PrintDefaults()
 		fmt.Println()
 	}
-	basePath := flag.String("b", ".", "base path")
 	debug := flag.Bool("d", false, "print debug messages")
 	flag.Parse()
 
@@ -87,34 +89,32 @@ func main() {
 
 	log.SetOutput(filter)
 
+	basePath := "." // Default value unless overridden by CLI argument.
 	args := flag.Args()
 	switch flag.NArg() {
 	case 0:
 		flag.Usage()
 		os.Exit(1)
 
-	// Set basePath if provided as argument.
 	case 2:
-		basePath = &args[1]
+		basePath = args[1]
 	}
 
 	// Run subcommand.
 	switch args[0] {
 
-	// Init [DIR]
 	case "init":
-		err := Init(*basePath, DefLayout)
+		err := Init(basePath, DefLayout)
 		if err != nil {
-			log.Println(err)
+			log.Fatal(err)
 		}
 
-	// Build [DIR]
 	case "build":
-		src = filepath.Join(*basePath, src)
-		dst = filepath.Join(*basePath, dst)
+		src = filepath.Join(basePath, src)
+		dst = filepath.Join(basePath, dst)
 		err := Build(src, dst)
 		if err != nil {
-			log.Println(err)
+			log.Fatal(err)
 		}
 	case "version":
 		fmt.Println(Version)
