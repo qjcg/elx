@@ -2,8 +2,7 @@
 
 A simple static site generator.
 
-**NOTE: This is pre-alpha software. Several
-features are not yet fully implemented.**
+**NOTE: This is alpha software.**
 
 
 ## Features
