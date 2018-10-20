@@ -16,7 +16,7 @@ features are not yet fully implemented.**
 - TOML-based configuration
 - Optional minification of web content
 
-## Anti-Features
+## Non-Features
 
 - Lots of subcommands
 - Lots of options
