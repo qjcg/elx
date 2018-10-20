@@ -1,4 +1,4 @@
-# Electrostatic
+# Elx
 
 A simple static site generator.
 
