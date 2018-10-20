@@ -10,13 +10,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	// For an example of front matter handling, see:
-	//   https://github.com/spf13/hugo/blob/master/parser/frontmatter.go
 	"github.com/hashicorp/logutils"
 	"github.com/microcosm-cc/bluemonday"
 	_ "github.com/naoina/toml"
-	"gopkg.in/russross/blackfriday.v2"
+	"github.com/russross/blackfriday"
 )
+
+// For an example of front matter handling, see:
+//   https://github.com/spf13/hugo/blob/master/parser/frontmatter.go
 
 // Layout is a collection of dirs and files representing an elx site.
 type Layout struct {
@@ -32,9 +33,9 @@ John Gosset 2016 (MIT License)
   elx [OPTS] SUBCOMMAND
 
   SUBCOMMANDS:
-	  init [DIR]
-	  build [DIR]
-	  version
+	init [DIR]
+	build [DIR]
+	version
 `
 
 	defConfig = `title = "An Elx Static Site"
@@ -47,17 +48,17 @@ var (
 	// subcommand.
 	DefLayout = &Layout{
 		Dirs: []string{
-			"_site",
-			"_templates",
-			"_posts",
+			"site",
+			"templates",
+			"posts",
 		},
 		Files: []string{
 			"config.toml",
 		},
 	}
 
-	src = "_posts"
-	dst = "_site"
+	src = "posts"
+	dst = "site"
 )
 
 // Post contains metadata for a blog post.
